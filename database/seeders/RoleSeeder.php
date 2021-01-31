@@ -18,31 +18,31 @@ class RoleSeeder extends Seeder
         Roles::create([
             'name' => 'Super Administrator',
             'description' => 'Support',
-            'full-access' => 'yes'
+            'full_access' => 'yes'
         ]);
 
         Roles::create([
             'name' => 'Administrator',
             'description' => 'Store Manager',
-            'full-access' => 'no'
+            'full_access' => 'no'
         ]);
 
         Roles::create([
             'name' => 'Supervisor',
             'description' => 'Store Supervisor',
-            'full-access' => 'no'
+            'full_access' => 'no'
         ]);
 
         Roles::create([
             'name' => 'Seller',
             'description' => 'Seller Store',
-            'full-access' => 'no'
+            'full_access' => 'no'
         ]);
 
         Roles::create([
             'name' => 'Delivery',
             'description' => 'Delivery Tienda',
-            'full-access' => 'no'
+            'full_access' => 'no'
         ]);
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
-
+namespace App\Http\Controllers\API;
+use App\Http\Controllers\API\BaseController as BaseController;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Resources\User as UserResource;
 
-class PermissionController extends Controller
+class UsersController extends BaseController
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +15,9 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::all();        
+        $user = User::paginate(7);
+        return $this->sendResponse(UserResource::collection($user), 'User retrieved successfully.');
     }
 
     /**
@@ -34,7 +38,14 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User([
+            'name'                                      => $request->get('name'),
+            'email'                                     => $request->get('email'),
+            'password'                                  => $request->get('password'),
+        ]);
+        $user->save();
+        return $this->sendResponse(new UserResource($user), 'User created successfully.');
+
     }
 
     /**
@@ -45,7 +56,8 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return $this->sendResponse(new UserResource($user), 'User retrieved successfully.');
     }
 
     /**
@@ -56,7 +68,8 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::find($id);
+
     }
 
     /**
@@ -68,7 +81,10 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $user->update($request->all());
+        return $this->sendResponse(new UserResource($user), 'User updated successfully.');
+
     }
 
     /**
@@ -79,6 +95,8 @@ class PermissionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return $this->sendResponse([], 'Permission deleted successfully.');
     }
 }

@@ -41,7 +41,7 @@ class RoleController extends BaseController
         $request->validate([
             'name'=>'required|max:50',
             'description'=>'required|max:50',
-            'full-access'=>'required|in:yes,no'
+            'full_access'=>'required|in:yes,no'
         ]);
         $role = Role::create($request->all());
         $role->permissions()->sync($request->get('permission'));
@@ -66,7 +66,7 @@ class RoleController extends BaseController
 
         $permiso = Permissions::get();
 
-        return $this->sendResponse(new ProductResource($role), 'Product retrieved successfully.');
+        return $this->sendResponse(new RoleResource($role), 'Product retrieved successfully.');
     }
 
     /**
@@ -103,6 +103,8 @@ class RoleController extends BaseController
         $role->update($request->all());
         $role->permissions()->sync($request->get('permission'));
         $role->save();
+        return $this->sendResponse(new RoleResource($role), 'Product updated successfully.');
+        
     }
 
     /**
@@ -114,5 +116,6 @@ class RoleController extends BaseController
     public function destroy(Role $role)
     {
         $role->delete();
+        return $this->sendResponse([], 'Role deleted successfully.');
     }
 }

@@ -5,6 +5,10 @@ use Illuminate\Support\Facades\Route;
 //Controladores
 use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
+use App\Http\Controllers\API\PermissionController;
+use App\Http\Controllers\API\UsersController;
+
+
 
 
 /*
@@ -22,6 +26,9 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 //Administrador
 Route::resource('roles', RoleController::class);
+Route::resource('permission', PermissionController::class);
+Route::resource('users', UsersController::class);
+
 
 
 
