@@ -22,6 +22,7 @@ class CreateUsersDescriptionsTable extends Migration
             $table->char('type_of_person',10);
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

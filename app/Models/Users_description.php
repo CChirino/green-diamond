@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Users_description extends Model
 {
-    use HasFactory;
+    use HasFactory,SoftDeletes;
 
     protected $fillable = [
         'social_security',
@@ -16,9 +16,12 @@ class Users_description extends Model
         'image',
         'type_of_person',
         'user_id',
+
     ];
 
-    public function users(){
-        return $this->belongsTo('App\Models\User')->withTimesTamps();
+    public function user()
+    {
+        return $this->belongsTo('App\Models\Users_description');
     }
+
 }

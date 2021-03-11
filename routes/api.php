@@ -7,6 +7,7 @@ use App\Http\Controllers\API\RegisterController;
 use App\Http\Controllers\API\RoleController;
 use App\Http\Controllers\API\PermissionController;
 use App\Http\Controllers\API\UsersController;
+use App\Http\Controllers\API\ProductsController;
 
 
 
@@ -24,10 +25,13 @@ use App\Http\Controllers\API\UsersController;
 
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
+Route::post('login-administrador', [RegisterController::class, 'login_admin']);
+
 //Administrador
 Route::resource('roles', RoleController::class);
 Route::resource('permission', PermissionController::class);
 Route::resource('users', UsersController::class);
+Route::resource('products', ProductsController::class);
 
 
 

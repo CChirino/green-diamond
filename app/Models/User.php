@@ -47,5 +47,10 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Models\Roles')->withTimesTamps();
     }
 
+    public function users_descriptions()
+    {
+        return $this->hasOne('App\Models\Users_description')->withTimesTamps();
+    }
+
 
 }
