@@ -4,8 +4,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Role;
+use App\Models\Roles;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Gate;
+
 
 class SellerController extends BaseController
 {
@@ -17,13 +22,13 @@ class SellerController extends BaseController
     public function index()
     {
         $seller = DB::table('users')
-        ->join('role_user','users.id', '=','role_user.user_id')
-        ->where('role_id','=',4)
-        ->whereNull('deleted_at')
-        ->select('users.*')
-        ->paginate(30);
-        return $this->sendResponse(UserResource::collection($seller), 'Users Seller retrieved successfully.');
-    }
+                    ->join('roles_user','users.id', '=','roles_user.user_id')
+                    ->where('roles_id','=',4)
+                    ->whereNull('deleted_at')
+                    ->select('users.*')
+                    ->get();
+        return $this->sendResponse(($seller), 'Users Seller retrieved successfully.');
+        }
 
     /**
      * Show the form for creating a new resource.
@@ -57,10 +62,10 @@ class SellerController extends BaseController
         $role->users()->create([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
         ]);
 
-        return $this->sendResponse(new UserResource($role), 'Seller created successfully.');
+        return $this->sendResponse(($role), 'Seller created successfully.');
     }
 
     /**
@@ -76,7 +81,7 @@ class SellerController extends BaseController
             return $this->sendError('Seller not found.');
         }
 
-        return $this->sendResponse(new UserResource($seller), 'User Supervisor retrieved successfully.');
+        return $this->sendResponse(($seller), 'Users Seller retrieved successfully.');
     }
 
     /**
@@ -103,10 +108,10 @@ class SellerController extends BaseController
         $seller->update([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
             ]);
-        return $this->sendResponse(new UserResource($seller), 'User Supervisor updated successfully.');
-    }
+            return $this->sendResponse(($seller), 'Users Seller updated successfully.');
+        }
 
     /**
      * Remove the specified resource from storage.

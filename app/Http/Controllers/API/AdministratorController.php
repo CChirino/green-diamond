@@ -4,8 +4,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Role;
+use App\Models\Roles;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Gate;
+
 
 class AdministratorController extends BaseController
 {
@@ -15,14 +20,17 @@ class AdministratorController extends BaseController
      * @return \Illuminate\Http\Response
      */
     public function index()
+    
     {
+        // Gate::authorize('haveaccess','admin.index');
+
         $admin = DB::table('users')
-        ->join('role_user','users.id', '=','role_user.user_id')
-        ->where('role_id','=',2)
-        ->whereNull('deleted_at')
-        ->select('users.*')
-        ->paginate(30);
-        return $this->sendResponse(UserResource::collection($admin), 'Users Administrator retrieved successfully.');
+                ->join('roles_user','users.id', '=','roles_user.user_id')
+                ->where('roles_id','=',2)
+                ->whereNull('deleted_at')
+                ->select('users.*')
+                ->get();
+        return $this->sendResponse(($admin), 'Users Administrator retrieved successfully.');
     }
 
     /**
@@ -63,7 +71,7 @@ class AdministratorController extends BaseController
             'password'              => $request->password,
         ]);
 
-        return $this->sendResponse(new UserResource($role), 'Admin created successfully.');
+        return $this->sendResponse(($role), 'Admin created successfully.');
     }
 
     /**
@@ -106,10 +114,10 @@ class AdministratorController extends BaseController
         $admin->update([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
             ]);
-        return $this->sendResponse(new UserResource($admin), 'User Admin updated successfully.');
-    }
+            return $this->sendResponse(($sadmin), 'Users Administrator updated successfully.');
+        }
 
     /**
      * Remove the specified resource from storage.

@@ -17,14 +17,13 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('product_name');
             $table->string('product_slug');
+            $table->integer('quantity');
             $table->decimal('price');
             $table->integer('discount_rate');
-            $table->string('short_description');
-            $table->text('long_description');
+            $table->string('description');
             $table->string('state');
-            $table->string('image')->nullable();
-            $table->integer('minimum_stock');
-            $table->integer('maximum_stock');
+            $table->string('image');
+            $table->integer('stock');
             $table->softDeletes(); 
             $table->timestamps();
         });

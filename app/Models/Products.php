@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+
 
 class Products extends Model
 {
@@ -14,11 +17,10 @@ class Products extends Model
         'product_slug', 
         'price', 
         'discount_rate',
-        'short_description',
-        'long_description',
+        'quantity',
+        'description',
         'state',
         'image',
-        'minimum_stock',
-        'maximum_stock'
+        'stock',
     ];
 }

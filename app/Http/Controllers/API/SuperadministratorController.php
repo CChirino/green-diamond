@@ -4,7 +4,14 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Role;
+use App\Models\Roles;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Gate;
+
+
+
 use App\Http\Resources\User as UserResource;
 
 class SuperadministratorController extends BaseController
@@ -17,13 +24,12 @@ class SuperadministratorController extends BaseController
     public function index()
     {
         $sadmin = DB::table('users')
-                    ->join('role_user','users.id', '=','role_user.user_id')
-                    ->where('role_id','=',1)
-                    ->where('users.nombre','LIKE','%'.$nombre.'%')
+                    ->join('roles_user','users.id', '=','roles_user.user_id')
+                    ->where('roles_id','=',1)
                     ->whereNull('deleted_at')
                     ->select('users.*')
-                    ->paginate(30);
-        return $this->sendResponse(UserResource::collection($sadmin), 'Users Super-Administrator retrieved successfully.');
+                    ->get();
+        return $this->sendResponse(($sadmin), 'Users Super-Administrator retrieved successfully.');
 
     }
 
@@ -46,7 +52,7 @@ class SuperadministratorController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-        $sadmin = User::find($id);
+        // $sadmin = User::find($id);
         $validator = Validator::make($input, [
             'name' => 'required',
             'email' => 'required',
@@ -57,15 +63,14 @@ class SuperadministratorController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $role = Role::find(1); //Rol Super-Admin
+        $role = Roles::find(1); //Rol Super-Admin
 
         $role->users()->create([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
         ]);
-
-        return $this->sendResponse(new UserResource($role), 'Super admin created successfully.');
+        return $this->sendResponse(($role), 'Super admin created successfully.');
 
 
     }
@@ -80,10 +85,10 @@ class SuperadministratorController extends BaseController
     {
         $sadmin = User::find($id);
         if (is_null($sadmin)) {
-            return $this->sendError('Product not found.');
+            return $this->sendError('User not found.');
         }
 
-        return $this->sendResponse(new UserResource($sadmin), 'User Super-admin retrieved successfully.');
+        return $this->sendResponse(($sadmin), 'Users Super-Administrator retrieved successfully.');
     }
 
     /**
@@ -110,9 +115,9 @@ class SuperadministratorController extends BaseController
         $sadmin->update([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
             ]);
-        return $this->sendResponse(new UserResource($sadmin), 'User Super-Admin updated successfully.');
+        return $this->sendResponse(($sadmin), 'Users Super-Administrator updated successfully.');
 
     }
 

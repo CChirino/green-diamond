@@ -6,6 +6,8 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Roles;
 use App\Http\Resources\Role as RoleResource;
+use Illuminate\Support\Facades\Gate;
+
 
 class RoleController extends BaseController
 {

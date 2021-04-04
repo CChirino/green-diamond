@@ -4,7 +4,11 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Products;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Products as ProductsResource;
+use Illuminate\Support\Facades\Gate;
+
+
 
 class ProductsController extends BaseController
 {
@@ -16,8 +20,9 @@ class ProductsController extends BaseController
     public function index()
     {
         $products = Products::all();        
-        $products = Products::paginate(7);
-        return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
+        // $products = Products::paginate(7);
+        return $products = Response()->json($products,200);
+        // return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
     }
 
     /**
@@ -44,32 +49,71 @@ class ProductsController extends BaseController
             'product_name' => 'required',
             'product_slug' => 'required',
             'price' => 'required',
-            'discount_rate' => 'required',
-            'short_description' => 'required',
-            'long_description' => 'required',
+            'quantity' => 'required',
+            'description' => 'required',
             'state' => 'required',
             'image' => 'required',
-            'minimum_stock' => 'required',
-            'maximum_stock' => 'required',
-        ]);
+            'stock' => 'required',
+            'discount_rate' =>'required'
+         ]);
         if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
-        $products = new Products([
-            'product_name'                                  => $request->get('product_name'),
-            'product_slug'                                  => $request->get('product_slug'),
-            'price'                                         => $request->get('price'),
-            'discount_rate'                                 => $request->get('discount_rate'),
-            'short_description'                             => $request->get('short_description'),
-            'long_description'                              => $request->get('long_description'),
-            'state'                                         => $request->get('state'),
-            'image'                                         => $request->get('image'),
-            'minimum_stock'                                 => $request->get('minimum_stock'),
-            'maximum_stock'                                 => $request->get('maximum_stock'),
-            ]);
-        $products->save();
+             return $this->sendError('Validation Error.', $validator->errors());       
+         }
 
-        return $this->sendResponse(new ProductsResource($products), 'Products created successfully.');
+
+         $filename = $request->image->getClientOriginalName();
+
+         $products = new Products();
+         $products->product_name = $request->product_name;
+         $products->product_slug = $request->product_slug;
+         $products->price = $request->price;
+         $products->quantity = $request->quantity;
+         $products->description = $request->description;
+         $products->state = $request->state;
+         $products->image = $request->image->storeAs('products',$filename,'public');
+         $products->stock = $request->stock;
+         $products->discount_rate = $request->discount_rate;
+         $products->save();
+
+         return $products = Response()->json($products,200);
+
+
+
+        // $filename = $request->image->getClientOriginalName();
+        // $products= Products::create([
+        //       'product_name'                              => $request->product_name,
+        //       'product_slug'                              => $request->product_slug,
+        //       'price'                                     => $request->price,
+        //       'quantity'                                  => $request->quantity,
+        //       'description'                               => $request->description,
+        //       'state'                                     => $request->state,
+        //       'image'                                     => $request->image->storeAs('products',$filename,'public'),
+        //       'stock'                                     => $request->stock,
+        //       'discount_rate'                             => $request->discount_rate
+        //  ]);
+        //  $products->save();
+        //  return $products = Response()->json($products,200);
+
+
+        // if($request->hasFile('image')){
+        //      $filename = $request->image->getClientOriginalName();
+        //      $products= Products::create([
+        //          'product_name'                              => $request->product_name,
+        //          'product_slug'                              => $request->product_slug,
+        //          'price'                                     => $request->price,
+        //          'quantity'                                  => $request->quantity,
+        //          'description'                               => $request->description,
+        //          'state'                                     => $request->state,
+        //          'image'                                     => $request->image->storeAs('products',$filename,'public'),
+        //          'stock'                                     => $request->stock,
+        //          'discount_rate'                             => $request->discount_rate
+        // ]);
+        //     $products->save();
+        // }
+
+
+ 
+        
     }
 
     /**
@@ -117,19 +161,46 @@ class ProductsController extends BaseController
             'product_slug' => 'required',
             'price' => 'required',
             'discount_rate' => 'required',
-            'short_description' => 'required',
-            'long_description' => 'required',
+            'quantity' => 'required',
+            'description' => 'required',
             'state' => 'required',
-            'image' => 'required',
+            // 'image' => 'required',
             'minimum_stock' => 'required',
             'maximum_stock' => 'required',
         ]);
+
+        
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        $products->update($request->all());
-        return $this->sendResponse(new ProductsResource($products), 'Product updated successfully.');
+        if($request->hasFile('image')){
+            $filename = $request->image->getClientOriginalName();
+            $products->update([
+                'product_name'                              => $request->product_name,
+                'product_slug'                              => $request->product_slug,
+                'price'                                     => $request->price,
+                'quantity'                                  => $request->quantity,
+                'description'                               => $request->description,
+                'state'                                     => $request->state,
+                // 'image'                                     => $request->image->storeAs('products',$filename,'public'),
+                // 'stock'                                     => $request->stock,
+                'discount_rate'                             => $request->discount_rate
+            ]);
+        }
+        else{
+            $products->update([
+                'product_name'                              => $request->product_name,
+                'product_slug'                              => $request->product_slug,
+                'price'                                     => $request->price,
+                'quantity'                                  => $request->quantity,
+                'description'                               => $request->description,
+                'state'                                     => $request->state,
+                // 'stock'                                     => $request->stock,
+                'discount_rate'                             => $request->discount_rate
+            ]);
+        }
+        return $this->sendResponse(new ProductsResource($request), 'Product updated successfully.');
 
 
     }

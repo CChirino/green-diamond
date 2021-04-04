@@ -5,6 +5,8 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Permissions;
 use App\Http\Resources\Permission as PermissionResource;
+use Illuminate\Support\Facades\Gate;
+
 
 
 class PermissionController extends BaseController

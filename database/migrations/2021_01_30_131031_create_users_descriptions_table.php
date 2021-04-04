@@ -17,7 +17,7 @@ class CreateUsersDescriptionsTable extends Migration
             $table->id();
             $table->integer('social_security');
             $table->date('birthdate');
-            $table->integer('phone_number');
+            $table->string('phone_number');
             $table->string('image')->nullable();
             $table->char('type_of_person',10);
             $table->unsignedBigInteger('user_id');

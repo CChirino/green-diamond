@@ -4,8 +4,13 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Role;
+use App\Models\Roles;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\User as UserResource;
+use Illuminate\Support\Facades\Gate;
+
 
 class DeliveryController extends BaseController
 {
@@ -17,12 +22,13 @@ class DeliveryController extends BaseController
     public function index()
     {
         $delivery = DB::table('users')
-        ->join('role_user','users.id', '=','role_user.user_id')
-        ->where('role_id','=',5)
-        ->whereNull('deleted_at')
-        ->select('users.*')
-        ->paginate(30);
-        return $this->sendResponse(UserResource::collection($delivery), 'Users Delivery retrieved successfully.');
+                    ->join('roles_user','users.id', '=','roles_user.user_id')
+                    ->where('roles_id','=',5)
+                    ->whereNull('deleted_at')
+                    ->select('users.*')
+                    ->get();
+        return $this->sendResponse(($delivery), 'Delivery retrieved successfully.');
+
     }
 
     /**
@@ -57,10 +63,10 @@ class DeliveryController extends BaseController
         $role->users()->create([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
         ]);
 
-        return $this->sendResponse(new UserResource($role), 'Seller created successfully.');
+        return $this->sendResponse(($role), 'Seller created successfully.');
     }
 
     /**
@@ -71,12 +77,12 @@ class DeliveryController extends BaseController
      */
     public function show($id)
     {
-        $seller = User::find($id);
-        if (is_null($seller)) {
-            return $this->sendError('Seller not found.');
+        $delivery = User::find($id);
+        if (is_null($delivery)) {
+            return $this->sendError('Delivery not found.');
         }
 
-        return $this->sendResponse(new UserResource($seller), 'User Seller retrieved successfully.');
+        return $this->sendResponse(($delivery), 'Users Delivery retrieved successfully.');
     }
 
     /**
@@ -103,10 +109,10 @@ class DeliveryController extends BaseController
         $delivery->update([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
             ]);
-        return $this->sendResponse(new UserResource($seller), 'User Supervisor updated successfully.');
-    }
+            return $this->sendResponse(($delivery), 'Users Delivery updated successfully.');
+        }
 
     /**
      * Remove the specified resource from storage.

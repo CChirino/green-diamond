@@ -7,6 +7,8 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Illuminate\Support\Facades\Crypt;
+
 
 class RegisterController extends BaseController
 {
@@ -39,7 +41,7 @@ class RegisterController extends BaseController
         }
 
         $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
+        $input['password'] = Crypt::encrypt($input['password']);
         $user = User::create($input);
         $success['token'] =  $user->createToken('MyApp')->accessToken;
         $success['name'] =  $user->name;
