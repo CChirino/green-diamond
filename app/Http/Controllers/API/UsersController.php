@@ -16,7 +16,7 @@ class UsersController extends BaseController
     public function index()
     {
         $user = User::all();        
-        $user = User::paginate(7);
+        $user = User::paginate(4);
         return $this->sendResponse(UserResource::collection($user), 'User retrieved successfully.');
     }
 
@@ -38,6 +38,12 @@ class UsersController extends BaseController
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
+
+        ]);
         $user = new User([
             'name'                                      => $request->get('name'),
             'email'                                     => $request->get('email'),
@@ -79,7 +85,7 @@ class UsersController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$id)
     {
         $user = User::find($id);
         $user->update($request->all());

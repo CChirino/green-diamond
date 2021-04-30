@@ -18,7 +18,7 @@ class Role extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'full-access' => $this->full_access,
+            'full_access' => $this->full_access,
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];    
