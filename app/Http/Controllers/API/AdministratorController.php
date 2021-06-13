@@ -8,18 +8,34 @@ use App\Models\Roles;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Crypt;
-use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Gate;
+
 
 
 class AdministratorController extends BaseController
 {
+
+        /**
+    * @OA\Get(
+    *     path="/api/admin/administrator",
+    *     summary="Mostrar usuarios administrador",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los usuarios administrador."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
+    
     
     {
         // Gate::authorize('haveaccess','admin.index');
@@ -52,23 +68,20 @@ class AdministratorController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-        $sadmin = User::find($id);
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'email_verified_at' => 'required',
-            'password' => 'required'
-        ]);
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
+        // $sadmin = User::find($id);
+        $request->validate([
+            'name'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
 
-        $role = Role::find(2); //Rol Admin
+        ]);
+
+        $role = Roles::find(2); //Rol Admin
 
         $role->users()->create([
             'name'                  => $request->name,
             'email'                 => $request->email,
-            'password'              => $request->password,
+            'password'              => Crypt::encrypt($request->password),
         ]);
 
         return $this->sendResponse(($role), 'Admin created successfully.');
@@ -111,12 +124,8 @@ class AdministratorController extends BaseController
     public function update(Request $request, $id)
     {
         $admin = User::find($id);
-        $admin->update([
-            'name'                  => $request->name,
-            'email'                 => $request->email,
-            'password'              => Crypt::encrypt($request->password),
-            ]);
-            return $this->sendResponse(($sadmin), 'Users Administrator updated successfully.');
+        $admin->update($request->all());
+        return $this->sendResponse(($sadmin), 'Users Administrator updated successfully.');
         }
 
     /**

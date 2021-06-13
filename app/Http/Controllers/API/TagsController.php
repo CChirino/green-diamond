@@ -38,9 +38,15 @@ class TagsController extends BaseController
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'tag_name' => 'required',
+            'tag_slug' => 'required',
+            'tag_description' => 'required',
+        ]);
         $tag = new Tags([
-            'category_name'                                  => $request->get('category_name'),
-            'category_slug'                                  => $request->get('category_slug'),
+            'tag_name'                                  => $request->get('tag_name'),
+            'tag_slug'                                  => $request->get('tag_slug'),
+            'tag_description'                           => $request->get('tag_description'),
         ]);
         $tag->save();
         return $this->sendResponse(TagsResource::collection($tag), 'Tag created successfully.');    }

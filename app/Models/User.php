@@ -54,6 +54,8 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasOne('App\Models\Users_description')->withTimesTamps();
     }
-
+    public function orders(){
+        return $this->hasMany('App\Models\Orders');
+    }
 
 }

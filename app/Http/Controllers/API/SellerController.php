@@ -12,8 +12,23 @@ use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Gate;
 
 
+
 class SellerController extends BaseController
 {
+                /**
+    * @OA\Get(
+    *     path="/api/admin/seller",
+    *     summary="Mostrar usuarios vendedores",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los vendedores."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     /**
      * Display a listing of the resource.
      *
@@ -49,16 +64,13 @@ class SellerController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'email_verified_at' => 'required',
-            'password' => 'required'
+        $request->validate([
+            'name'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
+
         ]);
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
-        $role = Role::find(4); //Rol Seller
+        $role = Roles::find(4); //Rol Seller
         $role->users()->create([
             'name'                  => $request->name,
             'email'                 => $request->email,
@@ -105,12 +117,8 @@ class SellerController extends BaseController
     public function update(Request $request, $id)
     {
         $seller = User::find($id);
-        $seller->update([
-            'name'                  => $request->name,
-            'email'                 => $request->email,
-            'password'              => Crypt::encrypt($request->password),
-            ]);
-            return $this->sendResponse(($seller), 'Users Seller updated successfully.');
+        $seller->update($request->all());
+        return $this->sendResponse(($seller), 'Users Seller updated successfully.');
         }
 
     /**

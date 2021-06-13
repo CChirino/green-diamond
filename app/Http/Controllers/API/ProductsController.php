@@ -7,11 +7,26 @@ use App\Models\Products;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Products as ProductsResource;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
 
 
 
 class ProductsController extends BaseController
 {
+                    /**
+    * @OA\Get(
+    *     path="/api/admin/products",
+    *     summary="Mostrar productos",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los productos."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     /**
      * Display a listing of the resource.
      *
@@ -19,8 +34,11 @@ class ProductsController extends BaseController
      */
     public function index()
     {
-        $products = Products::all();        
-        // $products = Products::paginate(7);
+        $products = DB::table('products')
+                            ->join('categories','products.categories_id', '=','categories.id')
+                            ->whereNull('products.deleted_at')
+                            ->select('products.*','categories.category_name')
+                            ->paginate(5);
         return $products = Response()->json($products,200);
         // return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
     }
@@ -43,38 +61,33 @@ class ProductsController extends BaseController
      */
     public function store(Request $request)
     {
-        $input = $request->all();
-
-        $validator = Validator::make($input, [
+         $request->validate([
             'product_name' => 'required',
             'product_slug' => 'required',
             'price' => 'required',
             'quantity' => 'required',
             'description' => 'required',
-            'state' => 'required',
-            'image' => 'required',
-            'stock' => 'required',
+            // 'file' => 'required',
+            'sku' => 'required',
             'discount_rate' =>'required'
-         ]);
-        if($validator->fails()){
-             return $this->sendError('Validation Error.', $validator->errors());       
-         }
+        ]);
 
-
-         $filename = $request->image->getClientOriginalName();
-
-         $products = new Products();
-         $products->product_name = $request->product_name;
-         $products->product_slug = $request->product_slug;
-         $products->price = $request->price;
-         $products->quantity = $request->quantity;
-         $products->description = $request->description;
-         $products->state = $request->state;
-         $products->image = $request->image->storeAs('products',$filename,'public');
-         $products->stock = $request->stock;
-         $products->discount_rate = $request->discount_rate;
-         $products->save();
-
+        $products = new Products();
+        $products->product_name = $request->product_name;
+        $products->product_slug = $request->product_slug;
+        $products->price = $request->price;
+        $products->quantity = $request->quantity;
+        $products->description = $request->description;
+        $products->discount_rate = $request->discount_rate;
+        $products->sku = $request->sku;
+        if ($request->hasFile('file')) {
+            $filenameWithExt = $request->file('file')->getClientOriginalName ();// Get Filename
+            $fileNameToStore = $filenameWithExt;// Upload Image
+            $path = $request->file('file')->move('storage/products', $fileNameToStore,'public');
+            $products->file = $fileNameToStore;
+            }
+        $products->categories_id = $request->categories_id;
+        $products->save();
          return $products = Response()->json($products,200);
 
 

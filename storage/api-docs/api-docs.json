@@ -1,0 +1,134 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Green Diamond",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000"
+        }
+    ],
+    "paths": {
+        "/api/admin/administrator": {
+            "get": {
+                "summary": "Mostrar usuarios administrador",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los usuarios administrador."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/categories": {
+            "get": {
+                "summary": "Mostrar categorias",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos las categorias."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/delivery": {
+            "get": {
+                "summary": "Mostrar usuarios deliveries",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los deliveries."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/permission": {
+            "get": {
+                "summary": "Mostrar permisos",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los permisos."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/products": {
+            "get": {
+                "summary": "Mostrar productos",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los productos."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/seller": {
+            "get": {
+                "summary": "Mostrar usuarios vendedores",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los vendedores."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/super-administrator": {
+            "get": {
+                "summary": "Mostrar usuarios super administrador",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los super administrador."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/supervisor": {
+            "get": {
+                "summary": "Mostrar usuarios  supervisor",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los super supervisor."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        },
+        "/api/admin/users": {
+            "get": {
+                "summary": "Mostrar usuarios",
+                "responses": {
+                    "200": {
+                        "description": "Mostrar todos los usuarios."
+                    },
+                    "default": {
+                        "description": "Ha ocurrido un error."
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        []
+    ]
+}

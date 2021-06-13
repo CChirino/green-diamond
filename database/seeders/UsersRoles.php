@@ -32,7 +32,7 @@ class UsersRoles extends Seeder
         $useradmin= User::create([
            'name'               => 'Christopher',
            'email'              => 'critijo@gmail.com',
-           'password'           => 'chacao14397',
+           'password'           =>  Hash::make('chacao14397'),
         ]);
         
         //rol admin

@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 
 class RegisterController extends BaseController
@@ -19,36 +21,50 @@ class RegisterController extends BaseController
 
      */
 
+    public function index(Request $request){
+        if (!Auth::check() && $request->path() != 'login') {
+            return redirect('http://localhost:4002/');
+        }
+    }
+
     public function register(Request $request)
 
     {
 
         $validator = Validator::make($request->all(), [
-
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required',
-            // 'c_password' => 'required|same:password',
-
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6',
         ]);
-
-   
-
-        if($validator->fails()){
-
-            return $this->sendError('Validation Error.', $validator->errors());       
-
+        if ($validator->fails())
+        {
+            return response(['errors'=>$validator->errors()->all()], 422);
         }
-
-        $input = $request->all();
-        $input['password'] = Crypt::encrypt($input['password']);
-        $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')->accessToken;
-        $success['name'] =  $user->name;
-
-        return $this->sendResponse($success, 'User register successfully.');
-
+        $request['password']=Hash::make($request['password']);        
+        $request['remember_token'] = Str::random(10);
+        $user = User::create($request->toArray());
+        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+        $response = ['token' => $token];
+        return response($response, 200);
     }
+
+        // $request->validate([
+        //     'name' => 'required|string',
+        //     'email' => 'required|string|email|unique:users',
+        //     'password' => 'required|string'
+        // ]);
+
+        // User::create([
+        //     'name' => $request->name,
+        //     'email' => $request->email,
+        //     'password' => bcrypt($request->password)
+        // ]);
+
+        // return response()->json([
+        //     'message' => 'Successfully created user!'
+        // ], 201);
+
+
 
    
 
@@ -65,37 +81,93 @@ class RegisterController extends BaseController
     public function login(Request $request)
 
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            $success['name'] =  $user->name;
-            return $this->sendResponse($success, 'User login successfully.');
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+        if ($validator->fails())
+        {
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
+                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['token' => $token];
+                return response($response, 200);
 
-        } 
-        else{ 
-
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
-
-        } 
+            } else {
+                $response = ["message" => "Password mismatch"];
+                return response($response, 422);
+            }
+        } else {
+            $response = ["message" =>'User does not exist'];
+            return response($response, 422);
+        }
 
     }
 
     public function login_admin(Request $request)
 
     {
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){ 
-            $user = Auth::user(); 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            $success['name'] =  $user->name;
-            return $this->sendResponse($success, 'User login successfully.');
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+        if ($validator->fails())
+        {
+            return response(['errors'=>$validator->errors()->all()], 422);
+        }
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if (Hash::check($request->password, $user->password)) {
+                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
+                $response = ['token' => $token];
+                return response($response, 200);
 
-        } 
-        else{ 
+            } else {
+                $response = ["message" => "Password mismatch"];
+                return response($response, 422);
+            }
+        } else {
+            $response = ["message" =>'User does not exist'];
+            return response($response, 422);
+        }
+    }
 
-            return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+    public function logout(Request $request)
+    {
+        $token = $request->user()->token();
+        $token->revoke();
+        $response = ['message' => 'You have been successfully logged out!'];
+        return response($response, 200);
+        // $request->user()->token()->revoke();
 
-        } 
+        // return response()->json([
+        //     'message' => 'Successfully logged out'
+        // ]);
+    }
 
+    protected function redirectTo()
+    {
+        return 'http://localhost:4003/';
+        // $role = Auth::user()->roles(); 
+
+        // switch ($role) {
+        //     case 'Super Administrator':
+        //             return 'http://localhost:4003/';
+        //         break;
+        //     case 'Employee':
+        //             return '/projects';
+        //         break; 
+        //     default:
+        //             return '/login'; 
+        //         break;
+        // }
+        // if (auth()->user()->roles == 'Super Administrator') {
+        //     return 'http://localhost:4003/';
+        // }
+        // return 'http://localhost:4002/';
     }
 
 }

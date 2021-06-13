@@ -9,8 +9,25 @@ use Illuminate\Support\Facades\Gate;
 
 
 
+
+
 class CategoryController extends BaseController
 {
+                /**
+    * @OA\Get(
+    *     path="/api/admin/categories",
+    *     summary="Mostrar categorias",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos las categorias."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
+    /**
     /**
      * Display a listing of the resource.
      *
@@ -40,9 +57,17 @@ class CategoryController extends BaseController
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'category_name'=> 'required',
+            'category_slug'=> 'required',
+            'category_description'=> 'required',
+
+        ]);
+
         $category = new Categories([
             'category_name'                                  => $request->get('category_name'),
             'category_slug'                                  => $request->get('category_slug'),
+            'category_description'                                  => $request->get('category_description'),
         ]);
         $category->save();
         return $this->sendResponse(CategoryResource::collection($category), 'Category created successfully.');

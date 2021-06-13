@@ -6,8 +6,29 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\User as UserResource;
 
+/**
+* @OA\Info(title="API Green Diamond", version="1.0")
+*
+* @OA\Server(url="http://127.0.0.1:8000")
+*/
+
+
 class UsersController extends BaseController
 {
+            /**
+    * @OA\Get(
+    *     path="/api/admin/users",
+    *     summary="Mostrar usuarios",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los usuarios."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     /**
      * Display a listing of the resource.
      *

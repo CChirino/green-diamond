@@ -11,9 +11,22 @@ use Illuminate\Support\Facades\Crypt;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Gate;
 
-
 class DeliveryController extends BaseController
 {
+            /**
+    * @OA\Get(
+    *     path="/api/admin/delivery",
+    *     summary="Mostrar usuarios deliveries",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los deliveries."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     /**
      * Display a listing of the resource.
      *
@@ -50,16 +63,14 @@ class DeliveryController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'email_verified_at' => 'required',
-            'password' => 'required'
+        $request->validate([
+            'name'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
+
         ]);
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
-        $role = Role::find(5); //Rol Delivery
+
+        $role = Roles::find(5); //Rol Delivery
         $role->users()->create([
             'name'                  => $request->name,
             'email'                 => $request->email,
@@ -106,11 +117,7 @@ class DeliveryController extends BaseController
     public function update(Request $request, $id)
     {
         $delivery = User::find($id);
-        $delivery->update([
-            'name'                  => $request->name,
-            'email'                 => $request->email,
-            'password'              => Crypt::encrypt($request->password),
-            ]);
+        $delivery->update($request->all());
             return $this->sendResponse(($delivery), 'Users Delivery updated successfully.');
         }
 

@@ -16,6 +16,21 @@ use App\Http\Resources\User as UserResource;
 
 class SuperadministratorController extends BaseController
 {
+                    /**
+    * @OA\Get(
+    *     path="/api/admin/super-administrator",
+    *     summary="Mostrar usuarios super administrador",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los super administrador."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
+    /**
     /**
      * Display a listing of the resource.
      *
@@ -53,16 +68,12 @@ class SuperadministratorController extends BaseController
     {
         $input = $request->all();
         // $sadmin = User::find($id);
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'email_verified_at' => 'required',
-            'password' => 'required'
-        ]);
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
+        $request->validate([
+            'name'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
 
+        ]);
         $role = Roles::find(1); //Rol Super-Admin
 
         $role->users()->create([
@@ -112,11 +123,7 @@ class SuperadministratorController extends BaseController
     public function update(Request $request, $id)
     {
         $sadmin = User::find($id);
-        $sadmin->update([
-            'name'                  => $request->name,
-            'email'                 => $request->email,
-            'password'              => Crypt::encrypt($request->password),
-            ]);
+        $sadmin->update($request->all());
         return $this->sendResponse(($sadmin), 'Users Super-Administrator updated successfully.');
 
     }

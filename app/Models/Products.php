@@ -15,12 +15,20 @@ class Products extends Model
     protected $fillable = [
         'product_name', 
         'product_slug', 
-        'price', 
         'discount_rate',
+        'price', 
         'quantity',
+        'sku',
+        'file',
         'description',
-        'state',
-        'image',
-        'stock',
+        'categories_id'
     ];
+
+    public function categories()
+    {
+        return $this->hasMany(Categories::class);
+    }
+    public function orders(){
+        return $this->belongsToMany(Order::class);
+    }
 }

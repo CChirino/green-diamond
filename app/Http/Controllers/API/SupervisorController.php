@@ -7,10 +7,30 @@ use App\Models\User;
 use App\Models\Roles;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
+
+
 
 
 class SupervisorController extends BaseController
 {
+
+                        /**
+    * @OA\Get(
+    *     path="/api/admin/supervisor",
+    *     summary="Mostrar usuarios  supervisor",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los super supervisor."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
+    /**
     /**
      * Display a listing of the resource.
      *
@@ -46,17 +66,14 @@ class SupervisorController extends BaseController
     public function store(Request $request)
     {
         $input = $request->all();
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'email_verified_at' => 'required',
-            'password' => 'required'
-        ]);
-        if($validator->fails()){
-            return $this->sendError('Validation Error.', $validator->errors());       
-        }
+        $request->validate([
+            'name'=> 'required',
+            'email'=> 'required',
+            'password'=> 'required',
 
-        $role = Role::find(3); //Rol Supervisor
+        ]);
+
+        $role = Roles::find(3); //Rol Supervisor
 
         $role->users()->create([
             'name'                  => $request->name,
@@ -104,11 +121,7 @@ class SupervisorController extends BaseController
     public function update(Request $request, $id)
     {
         $supervisor = User::find($id);
-        $supervisor->update([
-            'name'                  => $request->name,
-            'email'                 => $request->email,
-            'password'              => Crypt::encrypt($request->password),
-            ]);
+        $supervisor->update($request->all());
         return $this->sendResponse(new UserResource($supervisor), 'User Supervisor updated successfully.');
     }
 

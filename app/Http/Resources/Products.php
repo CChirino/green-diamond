@@ -21,12 +21,16 @@ class Products extends JsonResource
             'discount_rate' => $this->discount_rate,
             'price' => $this->price,
             'quantity' => $this->quantity,
-            'state' => $this->state,
-            'image' => $this->image,
+            'sku' => $this->sku,
+            'file' => $this->file,
             'description' => $this->description,
-            'stock' => $this->stocks,
+            'categories_id' => $this->categories_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];    
+
+        return array_merge(parent::toArray($request), [
+            'avatar_url' => env('APP_URL') . $this->file
+        ]);
     }
 }

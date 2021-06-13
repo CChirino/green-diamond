@@ -16,8 +16,9 @@ class Tags extends JsonResource
     {
         return [
         'id' => $this->id,
-        'tag_name' => $this->category_name,
-        'tag_slug' => $this->category_slug,
+        'tag_name' => $this->tag_name,
+        'tag_slug' => $this->tag_slug,
+        'tag_description' => $this->tag_description,
         'created_at' => $this->created_at->format('d/m/Y'),
         'updated_at' => $this->updated_at->format('d/m/Y'),
         ];   

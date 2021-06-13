@@ -8,9 +8,24 @@ use App\Http\Resources\Permission as PermissionResource;
 use Illuminate\Support\Facades\Gate;
 
 
-
 class PermissionController extends BaseController
 {
+
+                /**
+    * @OA\Get(
+    *     path="/api/admin/permission",
+    *     summary="Mostrar permisos",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los permisos."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
+
     /**
      * Display a listing of the resource.
      *
@@ -42,6 +57,12 @@ class PermissionController extends BaseController
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name'=> 'required',
+            'slug'=> 'required',
+            'description'=> 'required',
+
+        ]);
         $permission = new Permissions([
             'name'                                  => $request->get('name'),
             'slug'                                  => $request->get('slug'),
