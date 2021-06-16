@@ -10,6 +10,10 @@ use App\Http\Controllers\API\UsersController;
 use App\Http\Controllers\API\ProductsController;
 use App\Http\Controllers\API\User_descriptionController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ShoppingCartDetailController;
+use App\Http\Controllers\API\ShoppingCartController;
+
+
 
 
 
@@ -73,12 +77,19 @@ Route::prefix('admin')->group(function () {
     Route::get('/delivery/{id}', [App\Http\Controllers\API\DeliveryController::class, 'show'])->name('delivery.show');
     Route::put('/delivery/{id}', [App\Http\Controllers\API\DeliveryController::class, 'update'])->name('delivery.update');
     Route::delete('/delivery/{id}', [App\Http\Controllers\API\DeliveryController::class, 'destroy'])->name('delivery.delete');
+    //Shop Cart
+    Route::post('/shopping-cart/{product}/store', [App\Http\Controllers\API\ShoppingCartDetailController::class, 'store'])->name('shopping-cart-details.index');
+    Route::get('/add-shopping-cart/{product}/store', [App\Http\Controllers\API\ShoppingCartDetailController::class, 'store_product'])->name('store-a-product.index');
+    Route::put('/shopping-cart/update', [App\Http\Controllers\API\ShoppingCartController::class, 'update'])->name('shopping-cart.index');
+    Route::delete('/shopping-cart/{shopping_cart_detail}/destroy', [App\Http\Controllers\API\ShoppingCartDetailController::class, 'destroy'])->name('shopping-cart-details.delete');
+
+
 
     
 });
 
 Route::post('/profile', [App\Http\Controllers\API\User_descriptionController::class, 'store'])->name('profile.store');
-Route::put('/profile/{id}', [App\Http\Controllers\API\User_descriptionController::class, 'update'])->name('profile.update');
+Route::put('/profile/{product}/store', [App\Http\Controllers\API\ShoppingCartDetailController::class, 'update'])->name('profile.update');
 
 // Auth::routes(['verify' => true]);
 

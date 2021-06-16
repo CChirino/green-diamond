@@ -10,6 +10,20 @@ use Illuminate\Support\Facades\Gate;
 
 class RoleController extends BaseController
 {
+                        /**
+    * @OA\Get(
+    *     path="/api/admin/roles",
+    *     summary="Mostrar roles",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Mostrar todos los roles."
+    *     ),
+    *     @OA\Response(
+    *         response="default",
+    *         description="Ha ocurrido un error."
+    *     )
+    * )
+    */
     /**
      * Display a listing of the resource.
      *
