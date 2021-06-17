@@ -7,7 +7,6 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -30,22 +29,12 @@ class RegisterController extends BaseController
     public function register(Request $request)
 
     {
+        return  User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6',
-        ]);
-        if ($validator->fails())
-        {
-            return response(['errors'=>$validator->errors()->all()], 422);
-        }
-        $request['password']=Hash::make($request['password']);        
-        $request['remember_token'] = Str::random(10);
-        $user = User::create($request->toArray());
-        $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-        $response = ['token' => $token];
-        return response($response, 200);
+        ])
     }
 
         // $request->validate([
@@ -81,28 +70,20 @@ class RegisterController extends BaseController
     public function login(Request $request)
 
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
-        if ($validator->fails())
-        {
-            return response(['errors'=>$validator->errors()->all()], 422);
-        }
-        $user = User::where('email', $request->email)->first();
-        if ($user) {
-            if (Hash::check($request->password, $user->password)) {
-                $token = $user->createToken('Laravel Password Grant Client')->accessToken;
-                $response = ['token' => $token];
-                return response($response, 200);
+        if(!Auth::attempt($request->only('email','password'))){
+            return response([
+                'message'=>'Invalid Credentials'
+            ],Response::HTTP_UNAUTHORIZED);
+            
+            $user = Auth::user();
 
-            } else {
-                $response = ["message" => "Password mismatch"];
-                return response($response, 422);
-            }
-        } else {
-            $response = ["message" =>'User does not exist'];
-            return response($response, 422);
+            $token = $user->createToken('token')->plainTextToken;
+
+            $cookie = cookie('jwt', $token, 60*24); //1 day
+
+            return response([
+                'message'=>$token,
+            ])->withCookie($cookie);
         }
 
     }
@@ -137,15 +118,11 @@ class RegisterController extends BaseController
 
     public function logout(Request $request)
     {
-        $token = $request->user()->token();
-        $token->revoke();
-        $response = ['message' => 'You have been successfully logged out!'];
-        return response($response, 200);
-        // $request->user()->token()->revoke();
+        $cookie = Cookie::forget('jwt');
 
-        // return response()->json([
-        //     'message' => 'Successfully logged out'
-        // ]);
+        return response([
+            'message'=> 'Success',
+        ])->withCookie($cookie);
     }
 
     protected function redirectTo()
