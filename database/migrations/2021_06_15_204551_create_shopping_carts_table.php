@@ -15,10 +15,10 @@ class CreateShoppingCartsTable extends Migration
     {
         Schema::create('shopping_carts', function (Blueprint $table) {
             $table->id();
-            $table->enum('status',['ACTIVE','PENDING','APPROVED','FINISHED'])->default(['ACTIVE']);
+            $table->enum('status',['ACTIVE','PENDING','APPROVED','FINISHED']);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->timestamps('order_date')->nullable();
+            $table->timestamp('order_date')->nullable();
             $table->softDeletes(); 
             $table->timestamps();
         });

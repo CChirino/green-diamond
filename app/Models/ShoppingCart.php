@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class ShoppingCart extends Model
 {
@@ -14,6 +16,15 @@ class ShoppingCart extends Model
         'user_id', 
         'order_date',
     ];
+
+    public static function  findOrCreateBySessionId($shopping_cart_id){
+        if($shopping_cart_id){
+            return ShoppingCart::find($shopping_cart_id);
+        }
+        else{
+            return ShoppingCart::create();
+        }
+    }
 
     public function shopping_cart_details()
     {

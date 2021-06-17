@@ -4,6 +4,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\ShoppingCartDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use App\Models\ShoppingCart;
 
 class ShoppingCartDetailController extends BaseController
 {
