@@ -23,7 +23,7 @@ class Products extends Model
         'inventory',
         'is_active',
         'is_sale',
-        'file',
+        'images',
         'categories_id'
     ];
 

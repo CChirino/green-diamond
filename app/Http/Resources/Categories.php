@@ -16,9 +16,8 @@ class Categories extends JsonResource
     {
         return [
             'id' => $this->id,
-            'category_name' => $this->category_name,
-            'category_slug' => $this->category_slug,
-            'category_description' => $this->category_description,
+            'name' => $this->name,
+            'slug' => $this->slug,
             'created_at' => $this->created_at->format('d/m/Y'),
             'updated_at' => $this->updated_at->format('d/m/Y'),
         ];    
