@@ -58,16 +58,14 @@ class CategoryController extends BaseController
     public function store(Request $request)
     {
         $request->validate([
-            'category_name'=> 'required',
-            'category_slug'=> 'required',
-            'category_description'=> 'required',
+            'name'=> 'required',
+            'slug'=> 'required',
 
         ]);
 
         $category = new Categories([
-            'category_name'                                  => $request->get('category_name'),
-            'category_slug'                                  => $request->get('category_slug'),
-            'category_description'                                  => $request->get('category_description'),
+            'name'                                  => $request->get('name'),
+            'slug'                                  => $request->get('slug'),
         ]);
         $category->save();
         return $this->sendResponse(CategoryResource::collection($category), 'Category created successfully.');
@@ -83,8 +81,6 @@ class CategoryController extends BaseController
     {
         $category = Categories::find($id);
         return $this->sendResponse(CategoryResource::collection($category), 'Category retrieved successfully.');
-
-
     }
 
     /**

@@ -37,7 +37,7 @@ class ProductsController extends BaseController
         $products = DB::table('products')
                             ->join('categories','products.categories_id', '=','categories.id')
                             ->whereNull('products.deleted_at')
-                            ->select('products.*','categories.category_name')
+                            ->select('products.*','categories.name')
                             ->paginate(5);
         return $products = Response()->json($products,200);
         // return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
@@ -62,28 +62,35 @@ class ProductsController extends BaseController
     public function store(Request $request)
     {
          $request->validate([
-            'product_name' => 'required',
-            'product_slug' => 'required',
+            'title' => 'required',
+            'is_featured' => 'required',
+            'is_hot' => 'required',
             'price' => 'required',
-            'quantity' => 'required',
-            'description' => 'required',
-            // 'file' => 'required',
-            'sku' => 'required',
-            'discount_rate' =>'required'
+            'sale_price' => 'required',
+            'is_out_of_stock' => 'required',
+            'depot' =>'required',
+            'inventory' =>'required',
+            'is_active' =>'required',
+            'is_sale' =>'required',
+            'categories_id' =>'categories_id',
+
         ]);
 
         $products = new Products();
-        $products->product_name = $request->product_name;
-        $products->product_slug = $request->product_slug;
+        $products->title = $request->title;
+        $products->is_featured = $request->is_featured;
+        $products->is_hot = $request->is_hot;
         $products->price = $request->price;
-        $products->quantity = $request->quantity;
-        $products->description = $request->description;
-        $products->discount_rate = $request->discount_rate;
-        $products->sku = $request->sku;
-        if ($request->hasFile('file')) {
-            $filenameWithExt = $request->file('file')->getClientOriginalName ();// Get Filename
+        $products->sale_price = $request->sale_price;
+        $products->is_out_of_stock = $request->is_out_of_stock;
+        $products->depot = $request->depot;
+        $products->inventory = $request->inventory;
+        $products->is_active = $request->is_active;
+        $products->is_sale = $request->is_sale;
+        if ($request->hasFile('images')) {
+            $filenameWithExt = $request->file('images')->getClientOriginalName ();// Get Filename
             $fileNameToStore = $filenameWithExt;// Upload Image
-            $path = $request->file('file')->move('storage/products', $fileNameToStore,'public');
+            $path = $request->file('images')->move('storage/products', $fileNameToStore,'public');
             $products->file = $fileNameToStore;
             }
         $products->categories_id = $request->categories_id;
@@ -170,16 +177,17 @@ class ProductsController extends BaseController
         $input = $request->all();
         $products = Products::find($id);
         $validator = Validator::make($input, [
-            'product_name' => 'required',
-            'product_slug' => 'required',
+            'title' => 'required',
+            'is_featured' => 'required',
+            'is_hot' => 'required',
             'price' => 'required',
-            'discount_rate' => 'required',
-            'quantity' => 'required',
-            'description' => 'required',
-            'state' => 'required',
-            // 'image' => 'required',
-            'minimum_stock' => 'required',
-            'maximum_stock' => 'required',
+            'sale_price' => 'required',
+            'is_out_of_stock' => 'required',
+            'depot' =>'required',
+            'inventory' =>'required',
+            'is_active' =>'required',
+            'is_sale' =>'required',
+            'categories_id' =>'categories_id',
         ]);
 
         
@@ -187,30 +195,35 @@ class ProductsController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());       
         }
 
-        if($request->hasFile('image')){
-            $filename = $request->image->getClientOriginalName();
+        if($request->hasFile('images')){
+            $filename = $request->images->getClientOriginalName();
             $products->update([
-                'product_name'                              => $request->product_name,
-                'product_slug'                              => $request->product_slug,
-                'price'                                     => $request->price,
-                'quantity'                                  => $request->quantity,
-                'description'                               => $request->description,
-                'state'                                     => $request->state,
-                // 'image'                                     => $request->image->storeAs('products',$filename,'public'),
-                // 'stock'                                     => $request->stock,
-                'discount_rate'                             => $request->discount_rate
+                'title'                              => $request->title,
+                'is_featured'                              => $request->is_featured,
+                'is_hot'                                     => $request->is_hot,
+                'price'                                  => $request->price,
+                'sale_price'                               => $request->sale_price,
+                'depot'                                     => $request->depot,
+                'inventory'                                     => $request->inventory,
+                'is_active'                                     => $request->is_active,
+                'is_sale'                                     => $request->is_sale,
+                'categories_id'                                     => $request->categories_id,
+                'images'                                     => $request->images->->storeAs('storage/products',$filename,'public'),
+
             ]);
         }
         else{
             $products->update([
-                'product_name'                              => $request->product_name,
-                'product_slug'                              => $request->product_slug,
-                'price'                                     => $request->price,
-                'quantity'                                  => $request->quantity,
-                'description'                               => $request->description,
-                'state'                                     => $request->state,
-                // 'stock'                                     => $request->stock,
-                'discount_rate'                             => $request->discount_rate
+                'title'                              => $request->title,
+                'is_featured'                              => $request->is_featured,
+                'is_hot'                                     => $request->is_hot,
+                'price'                                  => $request->price,
+                'sale_price'                               => $request->sale_price,
+                'depot'                                     => $request->depot,
+                'inventory'                                     => $request->inventory,
+                'is_active'                                     => $request->is_active,
+                'is_sale'                                     => $request->is_sale,
+                'categories_id'                                     => $request->categories_id,
             ]);
         }
         return $this->sendResponse(new ProductsResource($request), 'Product updated successfully.');
