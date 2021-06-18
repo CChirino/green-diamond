@@ -12,7 +12,7 @@ class Categories extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'category_name', 'category_slug', 'category_description', 
+        'name', 'slug', 
       ];
 
       public function products()

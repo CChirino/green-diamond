@@ -13,14 +13,17 @@ class Products extends Model
     use HasFactory,SoftDeletes;
 
     protected $fillable = [
-        'product_name', 
-        'product_slug', 
-        'discount_rate',
+        'title', 
+        'is_featured', 
+        'is_hot',
         'price', 
-        'quantity',
-        'sku',
+        'sale_price',
+        'is_out_of_stock',
+        'depot',
+        'inventory',
+        'is_active',
+        'is_sale',
         'file',
-        'description',
         'categories_id'
     ];
 
