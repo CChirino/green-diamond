@@ -17,11 +17,16 @@ class Categories extends Model
     protected $table = 'categories';
 
     protected $fillable = [
-        'name', 'slug', 
+        'name', 'slug', 'product_id'
       ];
+
+    //   public function products()
+    //   {
+    //       return $this->belongsTo(Products::class,'categories_id');
+    //   }
 
       public function products()
       {
-          return $this->belongsTo(Products::class,'categories_id');
+          return $this->hasMany(Products::class,'product_id');
       }
 }
