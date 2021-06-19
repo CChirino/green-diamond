@@ -29,6 +29,11 @@ class Products extends Model
 
     public function categories()
     {
-        return $this->hasMany(Categories::class);
+        return $this->belongsToMany(Categories::class);
     }
+
+    // public function categories()
+    // {
+    //     return $this->hasMany(Categories::class);
+    // }
 }

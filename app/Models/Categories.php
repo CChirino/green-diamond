@@ -17,6 +17,6 @@ class Categories extends Model
 
       public function products()
       {
-          return $this->belongsTo(Products::class,'categories_id');
+          return $this->belongsToMany(Products::class);
       }
 }

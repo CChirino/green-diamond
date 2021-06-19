@@ -27,7 +27,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Black-Mulch-Mix-1;2---1.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Brown Mulch Mohamy',
@@ -40,7 +40,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Brown-Mulch-Mohamy-2.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Concrete Mix 60 lb bags',
@@ -53,7 +53,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Concrete-Mix-60-lb-bags.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Organic Planter Mix',
@@ -66,7 +66,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Organic-Planter-Mix.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Pea Gravell',
@@ -79,7 +79,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Pea-Gravell.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Play Sand Bags',
@@ -92,7 +92,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Play-Sand-Bags.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Red Mulch  1/2 Mix',
@@ -105,7 +105,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Red-Mulch--1-2--1--Mix.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Redwood Bark Mulch Mix 1 - 2',
@@ -118,7 +118,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Redwood-Bark-Mulch-Mix-1---2.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Shreded Bark Mulch',
@@ -131,7 +131,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Shreded-Bark-Mulch.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
         Products::create([
             'title' => 'Sucullent Mix : Potting Mix',
@@ -144,7 +144,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Sucullent-Mix-Potting-Mix.jpg',
-            'categories_id' => 1,
+            // 'categories_id' => 1,
         ]);
     }
 }

@@ -12,6 +12,7 @@ use App\Http\Controllers\API\User_descriptionController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ShoppingCartDetailController;
 use App\Http\Controllers\API\ShoppingCartController;
+use App\Http\Controllers\API\ProductsCategoriesController;
 
 
 
@@ -33,6 +34,7 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('login-administrador', [RegisterController::class, 'login_admin']);
 Route::get('/products', [App\Http\Controllers\API\ProductsController::class, 'index_client'])->name('products-client.index');
+Route::resource('products-categories', ProductsCategoriesController::class);
 
 
 //Administrator

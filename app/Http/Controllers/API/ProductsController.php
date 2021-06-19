@@ -38,7 +38,7 @@ class ProductsController extends BaseController
                             ->join('categories','products.categories_id', '=','categories.id')
                             ->whereNull('products.deleted_at')
                             ->select('products.*','categories.name')
-                            ->paginate(5);
+                            ->get();
         return $products = Response()->json($products,200);
         // return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
     }
