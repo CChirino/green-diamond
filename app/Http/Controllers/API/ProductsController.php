@@ -198,18 +198,17 @@ class ProductsController extends BaseController
         if($request->hasFile('images')){
             $filename = $request->images->getClientOriginalName();
             $products->update([
-                'title'                              => $request->title,
-                'is_featured'                              => $request->is_featured,
-                'is_hot'                                     => $request->is_hot,
-                'price'                                  => $request->price,
-                'sale_price'                               => $request->sale_price,
-                'depot'                                     => $request->depot,
-                'inventory'                                     => $request->inventory,
-                'is_active'                                     => $request->is_active,
-                'is_sale'                                     => $request->is_sale,
+                'title'                                             => $request->title,
+                'is_featured'                                       => $request->is_featured,
+                'is_hot'                                            => $request->is_hot,
+                'price'                                             => $request->price,
+                'sale_price'                                        => $request->sale_price,
+                'depot'                                             => $request->depot,
+                'inventory'                                         => $request->inventory,
+                'is_active'                                         => $request->is_active,
+                'is_sale'                                           => $request->is_sale,
                 'categories_id'                                     => $request->categories_id,
-                'images'                                     => $request->images->->storeAs('storage/products',$filename,'public'),
-
+                'images'                                            => $request->images->storeAs('storage/products',$filename,'public'),
             ]);
         }
         else{
@@ -242,5 +241,16 @@ class ProductsController extends BaseController
         $products = Products::find($id);
         $products->delete();
         return $this->sendResponse([], 'Product deleted successfully.');
+    }
+
+    public function index_client()
+    {
+        $products = DB::table('categories')
+                            ->join('products','products.categories_id', '=','categories.id')
+                            ->whereNull('products.deleted_at')
+                            ->select('products.*','categories.*')
+                            ->paginate(5);
+        return $products = Response()->json($products,200);
+        // return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
     }
 }

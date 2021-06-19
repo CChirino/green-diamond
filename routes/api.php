@@ -32,6 +32,8 @@ use App\Http\Controllers\API\ShoppingCartController;
 Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('login-administrador', [RegisterController::class, 'login_admin']);
+Route::get('/products', [App\Http\Controllers\API\ProductsController::class, 'index_client'])->name('products-client.index');
+
 
 //Administrator
 Route::prefix('admin')->group(function () {
@@ -39,7 +41,7 @@ Route::prefix('admin')->group(function () {
     Route::resource('permission', PermissionController::class);
     Route::resource('users', UsersController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('products', ProductsController::class);
+    Route::resource('products-admin', ProductsController::class);
 
     // Products
     // Route::get('/products', [App\Http\Controllers\API\ProductsController::class, 'index'])->name('products.index');
