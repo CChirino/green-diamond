@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Products;
+use App\Models\Categories;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\Categories as CategoryResource;
 use App\Http\Resources\Products as ProductsResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
@@ -245,12 +247,12 @@ class ProductsController extends BaseController
 
     public function index_client()
     {
-        $products = DB::table('categories')
-                            ->join('products','products.categories_id', '=','categories.id')
+        $products = DB::table('products')
+                            ->join('categories','products.categories_id', '=','categories.id')
                             ->whereNull('products.deleted_at')
                             ->select('products.*','categories.*')
-                            ->paginate(5);
+                            ->get();
         return $products = Response()->json($products,200);
-        // return $this->sendResponse(ProductsResource::collection($products), 'Products retrieved successfully.');
+
     }
 }

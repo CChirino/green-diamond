@@ -4,7 +4,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Categories;
+use App\Models\Products;
 use App\Http\Resources\Categories as CategoryResource;
+use App\Http\Resources\Products as ProductsResource;
 use Illuminate\Support\Facades\Gate;
 
 
@@ -35,8 +37,10 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $category = Categories::all();
-        return $this->sendResponse(CategoryResource::collection($category), 'Category retrieved successfully.');
+        $products = Categories::with(['products']);
+        return  CategoryResource::collection($products->paginate(10))->response();
+        // $category = Categories::all();
+        // return $this->sendResponse(CategoryResource::collection($category), 'Category retrieved successfully.');
     }
 
     /**

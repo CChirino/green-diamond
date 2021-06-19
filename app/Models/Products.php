@@ -5,12 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Categories;
+use App\Models\Products;
 
 
 
 class Products extends Model
 {
     use HasFactory,SoftDeletes;
+
+    protected $table = 'products';
+
 
     protected $fillable = [
         'title', 
@@ -29,6 +34,6 @@ class Products extends Model
 
     public function categories()
     {
-        return $this->hasMany(Categories::class);
+        return $this->hasMany(Categories::class,'categories_id');
     }
 }

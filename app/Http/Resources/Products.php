@@ -4,6 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use App\Http\Resources\Categories as CategoryResource;
+
+
 class Products extends JsonResource
 {
     /**
@@ -26,13 +29,12 @@ class Products extends JsonResource
             'is_active' => $this->is_active,
             'is_sale' => $this->is_sale,
             'images' => $this->images,
-            'categories_id' => $this->categories_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];    
 
         return array_merge(parent::toArray($request), [
-            'avatar_url' => env('APP_URL') . $this->file
+            'avatar_url' => env('APP_URL') . $this->images
         ]);
     }
 }
