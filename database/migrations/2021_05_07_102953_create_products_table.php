@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->boolean('is_active');
             $table->boolean('is_sale');
             $table->string('images')->nullable();;
-            $table->foreignId('categories_id')->references('id')->on('categories')->onDelete('cascade');
+            $table->foreignId('product_id')->references('id')->on('categories')->onDelete('cascade');
             $table->softDeletes(); 
             $table->timestamps();
         });

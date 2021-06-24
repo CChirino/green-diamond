@@ -8,6 +8,7 @@ use App\Models\Categories;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Categories as CategoryResource;
 use App\Http\Resources\Products as ProductsResource;
+use App\Http\Resources\ProductCollection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\DB;
 
@@ -247,12 +248,35 @@ class ProductsController extends BaseController
 
     public function index_client()
     {
+        $products = Products::with('categories')->get();
+        return  new ProductCollection($products);
+
+
+    }
+
+    public function index_products_categories()
+    {
+        $category = Categories::with('products')->get();
+        return  new ProductCollection($category);
+
+
+    }
+
+    public function products_count()
+    {
         $products = DB::table('products')
-                            ->join('categories','products.categories_id', '=','categories.id')
                             ->whereNull('products.deleted_at')
-                            ->select('products.*','categories.*')
-                            ->get();
-        return $products = Response()->json($products,200);
+                            ->select('products.*')
+                            ->get()
+                            ->count();
+        return $products;
+    }
+
+    public function collection()
+    {
+        $category = Categories::with('products')->get();
+        return  new ProductCollection($category);
+
 
     }
 }

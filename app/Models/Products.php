@@ -29,11 +29,12 @@ class Products extends Model
         'is_active',
         'is_sale',
         'images',
-        'categories_id'
+        'product_id'
     ];
 
     public function categories()
     {
-        return $this->hasMany(Categories::class,'categories_id');
+        return $this->belongsTo(Categories::class,'product_id');
     }
+    
 }

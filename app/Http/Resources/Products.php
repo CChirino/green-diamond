@@ -31,6 +31,7 @@ class Products extends JsonResource
             'images' => $this->images,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+
         ];    
 
         return array_merge(parent::toArray($request), [
