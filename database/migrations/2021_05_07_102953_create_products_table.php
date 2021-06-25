@@ -25,7 +25,8 @@ class CreateProductsTable extends Migration
             $table->integer('inventory');
             $table->boolean('is_active');
             $table->boolean('is_sale');
-            $table->string('images')->nullable();;
+            $table->string('images')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->foreignId('product_id')->references('id')->on('categories')->onDelete('cascade');
             $table->softDeletes(); 
             $table->timestamps();

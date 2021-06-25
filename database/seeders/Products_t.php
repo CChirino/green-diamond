@@ -27,6 +27,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Black-Mulch-Mix-1;2---1.jpg',
+            'thumbnail' => 'Black-Mulch-Mix-1;2---1.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -40,6 +41,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Brown-Mulch-Mohamy-2.jpg',
+            'thumbnail' => 'Brown-Mulch-Mohamy-2.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -53,6 +55,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Concrete-Mix-60-lb-bags.jpg',
+            'thumbnail' => 'Concrete-Mix-60-lb-bags.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -66,6 +69,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Organic-Planter-Mix.jpg',
+            'thumbnail' => 'Organic-Planter-Mix.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -79,6 +83,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Pea-Gravell.jpg',
+            'thumbnail' => 'Pea-Gravell.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -92,6 +97,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Play-Sand-Bags.jpg',
+            'thumbnail' => 'Play-Sand-Bags.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -105,6 +111,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Red-Mulch--1-2--1--Mix.jpg',
+            'thumbnail' => 'Red-Mulch--1-2--1--Mix.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -118,6 +125,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Redwood-Bark-Mulch-Mix-1---2.jpg',
+            'thumbnail' => 'Redwood-Bark-Mulch-Mix-1---2.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -131,6 +139,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Shreded-Bark-Mulch.jpg',
+            'thumbnail' => 'Shreded-Bark-Mulch.jpg',
             'product_id' => 1,
         ]);
         Products::create([
@@ -144,6 +153,7 @@ class Products_t extends Seeder
             'is_active' => false,
             'is_sale' => false,
             'images' => 'Sucullent-Mix-Potting-Mix.jpg',
+            'thumbnail' => 'Sucullent-Mix-Potting-Mix.jpg',
             'product_id' => 1,
         ]);
     }

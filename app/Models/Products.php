@@ -29,6 +29,7 @@ class Products extends Model
         'is_active',
         'is_sale',
         'images',
+        'thumbnail',
         'product_id'
     ];
 
