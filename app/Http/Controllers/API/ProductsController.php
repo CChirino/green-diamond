@@ -249,7 +249,8 @@ class ProductsController extends BaseController
     public function index_client()
     {
         $products = Products::with('categories')->get();
-        return  new ProductCollection($products);
+        $productCollection = new ProductCollection($products);
+        return response()->json($productCollection);
 
 
     }
@@ -257,7 +258,8 @@ class ProductsController extends BaseController
     public function index_products_categories()
     {
         $category = Categories::with('products')->get();
-        return  new ProductCollection($category);
+        $productCollection = new ProductCollection($category);
+        return response()->json($productCollection);
 
 
     }
@@ -275,8 +277,8 @@ class ProductsController extends BaseController
     public function collection()
     {
         $category = Categories::with('products')->get();
-        return  new ProductCollection($category);
-
+        $productCollection = new ProductCollection($category);
+        return response()->json($productCollection);
 
     }
 }
