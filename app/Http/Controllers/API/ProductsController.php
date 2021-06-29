@@ -1,19 +1,15 @@
 <?php
 
 namespace App\Http\Controllers\API;
-use App\Http\Controllers\API\BaseController as BaseController;
-use Illuminate\Http\Request;
+
 use App\Models\Products;
 use App\Models\Categories;
-use App\Models\Image;
-use App\Models\Thumbnail;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Resources\Categories as CategoryResource;
-use App\Http\Resources\Products as ProductsResource;
-use App\Http\Resources\ProductCollection;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Collection;
+use App\Http\Resources\ProductCollection;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\Products as ProductsResource;
+use App\Http\Controllers\API\BaseController as BaseController;
 
 
 
@@ -249,9 +245,18 @@ class ProductsController extends BaseController
         return $this->sendResponse([], 'Product deleted successfully.');
     }
 
-    public function index_client()
+    public function index_client(Request $request)
     {
-        $products = Products::with('categories','images','thumbnail')->get();
+        $id = $request->id;
+        
+        if (isset($id)) {
+            $products = [
+                Products::with('categories','images','thumbnail')->find($id)
+            ];
+        } else {
+            $products = Products::with('categories','images','thumbnail')->get();
+        }
+
         $productCollection = new ProductCollection($products);
         return response()->json($productCollection);
 
@@ -283,5 +288,18 @@ class ProductsController extends BaseController
         $productCollection = new ProductCollection($category);
         return response()->json($productCollection);
 
+    }
+
+    /**
+     * Get Product by id.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function productById(int $id)
+    {
+        $product = Products::with('categories','images','thumbnail')->find($id);
+
+        return response()->json($product);
     }
 }
