@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Categories;
 use App\Models\Products;
+use App\Models\Image;
+use App\Models\Thumbnail;
 
 
 
@@ -28,14 +30,25 @@ class Products extends Model
         'inventory',
         'is_active',
         'is_sale',
-        'images',
-        'thumbnail',
-        'product_id'
+        'product_id',
+        'image_id',
+        'thumbnail_id'
     ];
 
     public function categories()
     {
         return $this->belongsTo(Categories::class,'product_id');
+    }
+
+    public function images()
+    {
+        return $this->belongsTo(Image::class,'image_id');
+    }
+
+
+    public function thumbnail()
+    {
+        return $this->belongsTo(Thumbnail::class,'thumbnail_id');
     }
     
 }
