@@ -33,6 +33,7 @@ Route::post('register', [RegisterController::class, 'register']);
 Route::post('login', [RegisterController::class, 'login']);
 Route::post('login-administrador', [RegisterController::class, 'login_admin']);
 Route::get('/products', [App\Http\Controllers\API\ProductsController::class, 'index_client'])->name('products-client.index');
+Route::get('/products/{id}', [App\Http\Controllers\API\ProductsController::class, 'productById']);
 Route::get('/product-categories', [App\Http\Controllers\API\ProductsController::class, 'index_products_categories'])->name('products-categories.index');
 Route::get('/product/count', [App\Http\Controllers\API\ProductsController::class, 'products_count'])->name('products-count.index');
 Route::get('/collections', [App\Http\Controllers\API\ProductsController::class, 'collection'])->name('collection.index');
