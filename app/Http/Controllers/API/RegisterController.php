@@ -34,7 +34,7 @@ class RegisterController extends BaseController
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
 
-        ])
+        ]);
     }
 
         // $request->validate([

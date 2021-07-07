@@ -28,6 +28,8 @@ class Products extends JsonResource
             'inventory' => $this->inventory,
             'is_active' => $this->is_active,
             'is_sale' => $this->is_sale,
+            'description' => $this->description,
+            'sku' => $this->sku,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
 

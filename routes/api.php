@@ -12,6 +12,9 @@ use App\Http\Controllers\API\User_descriptionController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ShoppingCartDetailController;
 use App\Http\Controllers\API\ShoppingCartController;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Http\FormRequest;
 
 
 
@@ -29,15 +32,55 @@ use App\Http\Controllers\API\ShoppingCartController;
 |
 */
 
-Route::post('register', [RegisterController::class, 'register']);
-Route::post('login', [RegisterController::class, 'login']);
+
+// Route::post('register', [RegisterController::class, 'register']);
+// Route::post('login', [RegisterController::class, 'login']);
 Route::post('login-administrador', [RegisterController::class, 'login_admin']);
 Route::get('/products', [App\Http\Controllers\API\ProductsController::class, 'index_client'])->name('products-client.index');
 Route::get('/products/{id}', [App\Http\Controllers\API\ProductsController::class, 'productById']);
 Route::get('/product-categories', [App\Http\Controllers\API\ProductsController::class, 'index_products_categories'])->name('products-categories.index');
 Route::get('/product/count', [App\Http\Controllers\API\ProductsController::class, 'products_count'])->name('products-count.index');
 Route::get('/collections', [App\Http\Controllers\API\ProductsController::class, 'collection'])->name('collection.index');
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+// register
+Route::post('register', function(Request $request){
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password)
+    ]);
 
+    return $user;
+});
+
+// login
+Route::post('login', function(Request $request){
+    $credentials = $request->only('email', 'password');
+
+    if(! auth()->attempt($credentials)){
+        throw ValidationException::withMessages([
+            'email' => 'Invalid credentials'
+        ]);
+    }
+
+    $request->session()->regenerate();
+
+    return response()->json(null, 201);
+});
+
+// logout
+
+Route::post('logout', function(Request $request){
+    auth()->guard('web')->logout();
+
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
+
+    return response()->json(null, 200);
+});
 
 //Administrator
 Route::prefix('admin')->group(function () {
